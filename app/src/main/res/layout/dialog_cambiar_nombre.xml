@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/escribeNombreNuevoEText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="15"
+        android:hint="Escribe el nuevo nombre de usuario"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/confirmarConContraEText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <EditText
+        android:id="@+id/confirmarConContraEText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="15"
+        android:hint="Confirma con tu contraseña"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/cambiarNombreBtt"
+        app:layout_constraintEnd_toEndOf="@+id/escribeNombreNuevoEText"
+        app:layout_constraintStart_toStartOf="@+id/escribeNombreNuevoEText"
+        app:layout_constraintTop_toBottomOf="@+id/escribeNombreNuevoEText"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <Button
+        android:id="@+id/cambiarNombreBtt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Cambiar Nombre"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/confirmarConContraEText"
+        app:layout_constraintStart_toStartOf="@+id/confirmarConContraEText"
+        app:layout_constraintTop_toBottomOf="@+id/confirmarConContraEText"
+        app:layout_constraintVertical_bias="0.5" />
+</androidx.constraintlayout.widget.ConstraintLayout>

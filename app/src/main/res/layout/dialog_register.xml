@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/emailTextRegister"
+        android:layout_width="290sp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Escribe tu correo"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/unameTextRegister"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <EditText
+        android:id="@+id/unameTextRegister"
+        android:layout_width="290sp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Escribe tu nombre de usuario"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/passTextRegister"
+        app:layout_constraintEnd_toEndOf="@+id/emailTextRegister"
+        app:layout_constraintStart_toStartOf="@+id/emailTextRegister"
+        app:layout_constraintTop_toBottomOf="@+id/emailTextRegister"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <EditText
+        android:id="@+id/passTextRegister"
+        android:layout_width="290sp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Escribe tu contraseña"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/repPassRegister"
+        app:layout_constraintEnd_toEndOf="@+id/unameTextRegister"
+        app:layout_constraintStart_toStartOf="@+id/unameTextRegister"
+        app:layout_constraintTop_toBottomOf="@+id/unameTextRegister"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <EditText
+        android:id="@+id/repPassRegister"
+        android:layout_width="290sp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Repite tu contraseña"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/finishRegisterBtt"
+        app:layout_constraintEnd_toEndOf="@+id/passTextRegister"
+        app:layout_constraintStart_toStartOf="@+id/passTextRegister"
+        app:layout_constraintTop_toBottomOf="@+id/passTextRegister"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <Button
+        android:id="@+id/finishRegisterBtt"
+        android:layout_width="250sp"
+        android:layout_height="wrap_content"
+        android:text="Registrarse"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/repPassRegister"
+        app:layout_constraintStart_toStartOf="@+id/repPassRegister"
+        app:layout_constraintTop_toBottomOf="@+id/repPassRegister"
+        app:layout_constraintVertical_bias="0.5" />
+</androidx.constraintlayout.widget.ConstraintLayout>

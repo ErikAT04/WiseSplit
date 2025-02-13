@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/hacer_admin"
+        android:title="Convertir en Administrador"/>
+    <item
+        android:id="@+id/expulsar_usuario"
+        android:title="Expulsar del grupo"/>
+</menu>

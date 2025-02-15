@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS `group`;
 CREATE TABLE `group`(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
     group_name VARCHAR(255) NOT NULL,
-    image VARCHAR(255) DEFAULT 'https://i.discogs.com/_kK2FFfyrhNnbdTjCGMqfy_2gsMw120aUhKTb3M9kyE/rs:fit/g:sm/q:40/h:300/w:300/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTEzMTk5/NTg3LTE1NDk4MTEy/MjMtNTczMC5qcGVn.jpeg'
+    image VARCHAR(255) DEFAULT 'https://static.vecteezy.com/system/resources/previews/023/547/344/non_2x/group-icon-free-vector.jpg'
 );
 
 DROP TABLE IF EXISTS `user_group`;

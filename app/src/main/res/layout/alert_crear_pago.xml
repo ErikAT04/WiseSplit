@@ -82,6 +82,7 @@
         android:id="@+id/crearPagoBtt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/mainBlue"
         android:text="Crear Pago"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/scrollView2"

@@ -15,6 +15,7 @@ import androids.erikat.wisesplit.fragments.FragmentGroupUsers
 import androids.erikat.wisesplit.fragments.GroupListFragment
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 //Adaptador de Usuarios de un grupo
@@ -81,6 +82,7 @@ class UsersGroupAdapter(
                         true
                     }
                 }
+
             }
 
         }

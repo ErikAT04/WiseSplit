@@ -1,5 +1,6 @@
 package androids.erikat.wisesplit
 
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.MenuItem
 import androids.erikat.wisesplit.Utils.APIUtils
@@ -30,7 +31,10 @@ class GroupActivity : AppCompatActivity() {
         //Pone un título
         supportActionBar?.title = s
         //Añade el botón de volver hacia atrás
+        var upArrow = getDrawable(R.drawable.baseline_arrow_back_24);
+        upArrow?.setColorFilter(getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(upArrow)
     }
 
     //Fragmentos

@@ -10,17 +10,18 @@ import androids.erikat.wisesplit.R
 import androids.erikat.wisesplit.Utils.APIUtils
 import androids.erikat.wisesplit.databinding.NotificacionReciclableBinding
 import androids.erikat.wisesplit.databinding.PagoReciclableBinding
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 //Adapter de pagos
-class PaymentsAdapter(var listaPagos:MutableList<Payment>, var funcionPagar:(Payment)->Unit) : RecyclerView.Adapter<PaymentsAdapter.PaymentHolder>() {
+class PaymentsAdapter(var listaPagos:MutableList<Payment>, var funcionPagar:(Payment)->Unit, var funcionEditarPago: (Payment) -> Unit, var funcionBorrarPago: (Payment) -> Unit) : RecyclerView.Adapter<PaymentsAdapter.PaymentHolder>() {
     //Holder de Pagos
     class PaymentHolder(var v:View) : ViewHolder(v) {
         //ViewBinding
         lateinit var binding: PagoReciclableBinding
         //Función de carga de datos en el holder:
-        fun bind(pago:Payment, funcionPagar:()->Unit){
+        fun bind(pago:Payment, funcionPagar:()->Unit, funcionEditarPago:()->Unit, funcionBorrarPago:()->Unit){
             /*
             Pueden pasar varias cosas con los pagos:
                 1. Eres el que lo ha pagado (apareces en la relación 1:N)
@@ -72,6 +73,29 @@ class PaymentsAdapter(var listaPagos:MutableList<Payment>, var funcionPagar:(Pay
             binding.pagarBtt.setOnClickListener { //Si se pulsa al botón de pagar, se realiza la función pasada por parámetro
                 funcionPagar()
             }
+
+            //Si el usuario es el creador del pago, podrá editarlo o borrarlo.
+            if(pago.payer.email==APIUtils.mainUser!!.email){
+                v.setOnLongClickListener {
+                    var popupMenu = PopupMenu(v.context, v)
+
+                    popupMenu.inflate(R.menu.payment_menu)
+
+                    popupMenu.setOnMenuItemClickListener {
+                        when(it.itemId){
+                            R.id.borrarPago -> {
+                                funcionBorrarPago()
+                            }
+                            R.id.editarPago -> {
+                                funcionEditarPago()
+                            }
+                        }
+                        true
+                    }
+                    popupMenu.show()
+                    true
+                }
+            }
         }
     }
     //Función de creación del ViewHolder: Se crea una vista y devuelve un holder con esa vista
@@ -86,9 +110,14 @@ class PaymentsAdapter(var listaPagos:MutableList<Payment>, var funcionPagar:(Pay
     }
     //Función de carga de datos: Carga en el holder el pago en función de la posición y una función pasada por el constructor en función del pago
     override fun onBindViewHolder(holder: PaymentHolder, position: Int) {
-        holder.bind(listaPagos[position]){
-            funcionPagar(listaPagos[position])
-        }
+        var pago = listaPagos[position]
+        holder.bind(pago, {
+            funcionPagar(pago)
+        }, funcionBorrarPago = {
+            funcionBorrarPago(pago)
+        }, funcionEditarPago = {
+            funcionEditarPago(pago)
+        })
     }
     //Función de cambio de lista: Actualiza el holder con una nueva lista.
     fun cambiarLista(lista:MutableList<Payment>){

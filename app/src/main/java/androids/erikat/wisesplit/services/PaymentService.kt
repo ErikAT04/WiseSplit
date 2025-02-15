@@ -45,6 +45,9 @@ interface PaymentService {
     //Insertar usuario en un pago
     @POST("payments/addUserToPayment")
     suspend fun insertUserInPayment(@Body payerDTO: PayerDTO): Response<String>
+    //Borrar todos los usuarios de un pago
+    @DELETE("payments/{id}/erasePayers")
+    suspend fun removeAllPayersFromPayment(@Path("id") id: Int): Response<String>
 
 
 }

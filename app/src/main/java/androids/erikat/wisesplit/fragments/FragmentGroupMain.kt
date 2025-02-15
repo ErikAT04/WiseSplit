@@ -1,5 +1,6 @@
 package androids.erikat.wisesplit.fragments
 
+import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androids.erikat.wisesplit.DAO.PaymentDAO
+import androids.erikat.wisesplit.DAO.UserDAO
 import androids.erikat.wisesplit.Dialogs.InsertPaymentDialog
 import androids.erikat.wisesplit.Model.Payment
 import androids.erikat.wisesplit.Model.User
@@ -48,13 +50,40 @@ class FragmentGroupMain(var funcionCambioToolbar: (Toolbar, String) -> Unit) : F
             LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, true) //En este caso es True porque interesa que los pagos más recientes salgan los primeros
         binding.pagosGrupoRView.addItemDecoration(DividerItemDecoration(view.context, LinearLayoutManager.VERTICAL))
         //Prepara el adapter
-        adapter = PaymentsAdapter(listaPagos) { pago -> //Función del botón de pagar
+        adapter = PaymentsAdapter(listaPagos, funcionPagar =  { pago -> //Función del botón de pagar
             lifecycleScope.launch {
                 PaymentDAO().pay(APIUtils.mainUser!!.email, pago.id!!) //El usuario actual realiza el pago del elemento seleccionado
                 Toast.makeText(view?.context, "¡¡Pago realizado!!", Toast.LENGTH_SHORT).show() //Muestra el resultado
                 cargarDatos() //Recarga los datos
             }
-        }
+        }, funcionBorrarPago = {
+            lifecycleScope.launch {
+                PaymentDAO().delete(it)
+                cargarDatos()
+            }
+        }, funcionEditarPago = {
+            lifecycleScope.launch {
+                var usuariosAPagar = UserDAO().getPayersfromPayment(it.id!!)
+                var algunoHaPagado:Boolean = false
+                usuariosAPagar.forEach{
+                    if (it.hasPaid){
+                        algunoHaPagado = true
+                    }
+                }
+                if(algunoHaPagado){
+                    AlertDialog.Builder(context).setMessage("No se puede editar un pago donde ya ha pagado algún usuario").show()
+                }else {
+                    var alerta = InsertPaymentDialog {
+                        lifecycleScope.launch {
+                            cargarDatos()
+                        }
+                    }
+                    alerta.cargarPagoAEditar(it)
+                    alerta.show(requireActivity().supportFragmentManager, "Actualizar Pago")
+                }
+            }
+
+        })
         binding.pagosGrupoRView.adapter = adapter
         //Añade funcionalidad al FAB
         binding.addPagoFAB.setOnClickListener {

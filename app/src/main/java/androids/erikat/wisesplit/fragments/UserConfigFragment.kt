@@ -5,16 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androids.erikat.wisesplit.DAO.UserDAO
 import androids.erikat.wisesplit.Dialogs.ChangeNameDialog
 import androids.erikat.wisesplit.Dialogs.ChangePasswordDialog
-import androids.erikat.wisesplit.Model.User
 import androids.erikat.wisesplit.R
 import androids.erikat.wisesplit.Utils.APIUtils
 import androids.erikat.wisesplit.Utils.cargarImagen
-import androids.erikat.wisesplit.databinding.FragmentDashboardBinding
+import androids.erikat.wisesplit.databinding.FragmentUserSettingsBinding
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -23,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class UserConfigFragment(var funcionActionBar:(Toolbar, String)->Unit):Fragment() {
 
-    lateinit var binding:FragmentDashboardBinding
+    lateinit var binding:FragmentUserSettingsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,8 +29,8 @@ class UserConfigFragment(var funcionActionBar:(Toolbar, String)->Unit):Fragment(
         savedInstanceState: Bundle?
     ): View? {
         //Se cargan la vista y el binding
-        var view = inflater.inflate(R.layout.fragment_dashboard, container, false)
-        binding = FragmentDashboardBinding.bind(view)
+        var view = inflater.inflate(R.layout.fragment_user_settings, container, false)
+        binding = FragmentUserSettingsBinding.bind(view)
 
         binding.changeNameLayout.setOnClickListener {
             ChangeNameDialog(){

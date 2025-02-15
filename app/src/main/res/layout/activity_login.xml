@@ -5,15 +5,15 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".LoginActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:gravity="center"
         android:id="@+id/loginToolbar"
-        android:layout_width="0dp"
+        android:layout_width="411dp"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="@color/darkBlue"
+        app:titleTextColor="@color/white"
+        android:gravity="center"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,6 +24,7 @@
         android:id="@+id/userOrEmailTextLogIn"
         android:layout_width="300sp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Escriba su usuario o correo"
         android:inputType="text"
@@ -50,11 +51,15 @@
 
     <Button
         android:id="@+id/logInBtt"
-        android:layout_width="wrap_content"
+        android:layout_width="300sp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+
+        android:backgroundTint="@color/mainBlue"
+        android:backgroundTintMode="src_over"
         android:text="Iniciar Sesión"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/initRegisterBtt"
+        app:layout_constraintBottom_toTopOf="@+id/initRegisterBtt"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordFieldLogin"
@@ -62,13 +67,15 @@
 
     <Button
         android:id="@+id/initRegisterBtt"
-        android:layout_width="wrap_content"
+        android:layout_width="300sp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/mainBlue"
         android:text="Registrarse"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/logInBtt"
-        app:layout_constraintTop_toBottomOf="@+id/passwordFieldLogin"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logInBtt"
         app:layout_constraintVertical_bias="0.5" />
 </androidx.constraintlayout.widget.ConstraintLayout>

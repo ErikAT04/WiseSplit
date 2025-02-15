@@ -82,7 +82,7 @@ class NotifDAO : DAO<Int, Notification> {
                 notif.notif_id,
                 GroupDAO().getItem(notif.group_id)!!,
                 UserDAO().getItem(notif.user_email)!!,
-                LocalDate.parse(notif.notif_date)
+                LocalDateTime.parse(notif.notif_date).toLocalDate()
             )
         }
         //Si la respuesta no es correcta, devuelve un objeto nulo
@@ -105,7 +105,7 @@ class NotifDAO : DAO<Int, Notification> {
                 it.notif_id,
                 GroupDAO().getItem(it.group_id)!!,
                 UserDAO().getItem(it.user_email)!!,
-                LocalDate.parse(it.notif_date)
+                LocalDateTime.parse(it.notif_date).toLocalDate()
             )
         }
     }
@@ -126,7 +126,7 @@ class NotifDAO : DAO<Int, Notification> {
                 it.notif_id,
                 GroupDAO().getItem(it.group_id)!!,
                 UserDAO().getItem(it.user_email)!!,
-                LocalDate.parse(it.notif_date)
+                LocalDateTime.parse(it.notif_date).toLocalDate()
             )
         }
     }
@@ -147,7 +147,7 @@ class NotifDAO : DAO<Int, Notification> {
                 it.notif_id,
                 GroupDAO().getItem(it.group_id)!!,
                 UserDAO().getItem(it.user_email)!!,
-                LocalDate.parse(it.notif_date)
+                LocalDateTime.parse(it.notif_date).toLocalDate()
             )
         }
     }

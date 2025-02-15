@@ -1,5 +1,6 @@
 package androids.erikat.wisesplit.Dialogs
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Build
@@ -15,8 +16,8 @@ import androids.erikat.wisesplit.Utils.APIUtils
 import androids.erikat.wisesplit.adapters.UsersGroupAdapter
 import androids.erikat.wisesplit.databinding.AlertCrearPagoBinding
 import androids.erikat.wisesplit.fragments.FragmentGroupMain
-import androids.erikat.wisesplit.fragments.FragmentGroupUsers
 import androidx.annotation.RequiresApi
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -25,12 +26,16 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import kotlin.math.round
 //Diálogo de Inserción de Pagos
-class InsertPaymentDialog(var funcion:()->Unit) : DialogFragment() {
+class InsertPaymentDialog(var funcion: () -> Unit) : DialogFragment() {
     lateinit var binding: AlertCrearPagoBinding
     //Lista de usuarios
     var listaUsuarios:MutableList<User> = mutableListOf()
     lateinit var adapter:UsersGroupAdapter
 
+    lateinit var pagoAEditar:Payment
+
+    var editando = false //Booleana que comprueba si se está editando un pago existente o no
+    @SuppressLint("DefaultLocale")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity.let {
@@ -45,15 +50,20 @@ class InsertPaymentDialog(var funcion:()->Unit) : DialogFragment() {
             adapter = UsersGroupAdapter(listaUsuarios, true, {}, {})
             //Vinculo el adapter
             binding.usuariosElegirRView.adapter = adapter
+            //Si se está editando, se añade la lista de elementos del pago a editar, asi como sus datos
+            if (editando) {
+                FragmentGroupMain.listaSeleccionados.addAll(pagoAEditar.listaPagadores.map { it.user })
+                binding.nombrePagoEText.setText(pagoAEditar.arg)
+                binding.cantidadEText.setText(pagoAEditar.quantity.toString())
+            }
             //Carga de la lista de usuarios
             cargarListaUsuarios()
-
             binding.crearPagoBtt.setOnClickListener {
                 if(FragmentGroupMain.listaSeleccionados.isEmpty()){ //Si no hay usuarios seleccionados
                     Toast.makeText(view.context, "Elige al menos un usuario", Toast.LENGTH_SHORT).show()
                 } else {
                     if (binding.cantidadEText.text.isEmpty() || binding.nombrePagoEText.text.isEmpty()){ //Si algun campo está vacío
-                         binding.cantidadEText.error = if(binding.cantidadEText.text.isEmpty()) "El campo no puede estar vacío" else null
+                        binding.cantidadEText.error = if(binding.cantidadEText.text.isEmpty()) "El campo no puede estar vacío" else null
                         binding.nombrePagoEText.error = if(binding.nombrePagoEText.text.isEmpty()) "El campo no puede estar vacío" else null
                     } else {
                         lifecycleScope.launch {
@@ -61,12 +71,32 @@ class InsertPaymentDialog(var funcion:()->Unit) : DialogFragment() {
                             //Se coge la cantidad total y se divide entre los usuarios a pagar + 1 (Porque el creador cuenta)
                             var cantidad_por_usuario = binding.cantidadEText.text.toString().toDouble()
                             cantidad_por_usuario = cantidad_por_usuario/(FragmentGroupMain.listaSeleccionados.size+1)
-                            //Se redondea y se crea una lista de Payers, la cual se introduce en el pago
-                            var payment = Payment(-1, binding.nombrePagoEText.text.toString(), APIUtils.mainUser!!, LocalDate.now(), binding.cantidadEText.text.toString().toDouble(), APIUtils.selectedGroup!!, FragmentGroupMain.listaSeleccionados.map {
-                                Payer(it, (round(cantidad_por_usuario)), false)
-                            })
-                            //Se insertan y se cierra el dialogo, además de hacer una función pasada por parámetro
-                            PaymentDAO().insert(payment)
+                            if(editando) {
+                                var payment = Payment(id = pagoAEditar.id,
+                                    binding.nombrePagoEText.text.toString(),
+                                    APIUtils.mainUser!!,
+                                    pagoAEditar.date,
+                                    binding.cantidadEText.text.toString().toDouble(),
+                                    APIUtils.selectedGroup!!,
+                                    FragmentGroupMain.listaSeleccionados.map {
+                                        Payer(it, (String.format("%.2f", cantidad_por_usuario).toDouble()), false)
+                                    }.toMutableList())
+                                PaymentDAO().update(payment)
+                            }else {
+                                //Se redondea y se crea una lista de Payers, la cual se introduce en el pago
+                                var payment = Payment(
+                                    -1,
+                                    binding.nombrePagoEText.text.toString(),
+                                    APIUtils.mainUser!!,
+                                    LocalDate.now(),
+                                    binding.cantidadEText.text.toString().toDouble(),
+                                    APIUtils.selectedGroup!!,
+                                    FragmentGroupMain.listaSeleccionados.map {
+                                        Payer(it, (String.format("%.2f", cantidad_por_usuario).toDouble()), false)
+                                    }.toMutableList())
+                                //Se insertan y se cierra el dialogo, además de hacer una función pasada por parámetro
+                                PaymentDAO().insert(payment)
+                            }
                             //Se borran todos los usuarios de la lista de seleccionados
                             FragmentGroupMain.listaSeleccionados.removeAll(FragmentGroupMain.listaSeleccionados)
                             dismiss()
@@ -91,5 +121,9 @@ class InsertPaymentDialog(var funcion:()->Unit) : DialogFragment() {
             adapter.cambiarLista(listaUsuarios) //Actualiza el adapter
         }
     }
-
+    //Función de carga de pago para editarlo:
+    fun cargarPagoAEditar(p:Payment){
+        editando = true
+        pagoAEditar = p
+    }
 }

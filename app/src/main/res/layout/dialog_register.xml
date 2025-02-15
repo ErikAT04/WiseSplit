@@ -61,6 +61,7 @@
         android:id="@+id/finishRegisterBtt"
         android:layout_width="250sp"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/mainBlue"
         android:text="Registrarse"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/repPassRegister"

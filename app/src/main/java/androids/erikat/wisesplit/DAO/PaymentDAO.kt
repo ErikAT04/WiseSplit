@@ -1,6 +1,7 @@
 package androids.erikat.wisesplit.DAO
 
 import android.os.Build
+import android.util.Log
 import androids.erikat.wisesplit.DTO.GroupDTO
 import androids.erikat.wisesplit.DTO.PayerDTO
 import androids.erikat.wisesplit.DTO.PaymentDTO
@@ -66,6 +67,14 @@ class PaymentDAO : DAO<Int, Payment> {
         var response = apiService.updatePayment(obj.id!!, dto)
         //Se guarda si se ha realizado correctamente
         var resp = response.isSuccessful
+
+        apiService.removeAllPayersFromPayment(obj.id!!)
+
+        for (payer in obj.listaPagadores){
+            //Se inserta un usuario en el pago con la cantidad de cada uno, si ha pagado ya (normalmente es falso de primeras), el id del pago y el email del usuario
+            apiService.insertUserInPayment(PayerDTO(payer.user.email, obj.id!!, payer.quantity, payer.hasPaid))
+        }
+
         //Se devuelve la booleana
         return resp
     }
@@ -86,9 +95,21 @@ class PaymentDAO : DAO<Int, Payment> {
         //Se hace una petición para obtener el pago con ese ID
         var response = apiService.getPayment(value)
         //Si la respuesta es correcta, se devuelve un pago con esos datos obtenidos
-        if (response.isSuccessful) {
-            payment = response.body()!!
-            return Payment(payment.payment_id, payment.payment_args, UserDAO().getItem(payment.payer_email)!!, LocalDate.parse(payment.payment_date), payment.total_payment.toDouble(), GroupDAO().getItem(payment.group_id)!!, mutableListOf())
+        try {
+            if (response.isSuccessful) {
+                payment = response.body()!!
+                return Payment(
+                    payment.payment_id,
+                    payment.payment_args,
+                    UserDAO().getItem(payment.payer_email)!!,
+                    LocalDateTime.parse(payment.payment_date).toLocalDate(),
+                    payment.total_payment.toDouble(),
+                    GroupDAO().getItem(payment.group_id)!!,
+                    UserDAO().getPayersfromPayment(payment.payment_id!!).toMutableList()
+                )
+            }
+        }catch (e:Exception){
+            Log.e("Error", e.toString())
         }
         //Si no es correcta, se devuelve null
         return null
@@ -106,12 +127,12 @@ class PaymentDAO : DAO<Int, Payment> {
         }
         //Devuelve la lista mapeada de DTO a Pago
         return payments.map {
-            Payment(it.payment_id, it.payment_args, UserDAO().getItem(it.payer_email)!!, LocalDate.parse(it.payment_date), it.total_payment.toDouble(), GroupDAO().getItem(it.group_id)!!,UserDAO().getPayersfromPayment(it.payment_id!!))
+            Payment(it.payment_id, it.payment_args, UserDAO().getItem(it.payer_email)!!, LocalDateTime.parse(it.payment_date).toLocalDate(), it.total_payment.toDouble(), GroupDAO().getItem(it.group_id)!!,UserDAO().getPayersfromPayment(it.payment_id!!).toMutableList())
         }
     }
     //Función de Obtención de Pagos de un grupo
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun getPaymentsByGroup(g: Group): List<Payment> {
+    suspend fun getPaymentsByGroup(g: Group): MutableList<Payment> {
         //Se crea una lista DTO vacía
         var payments: List<PaymentDTO> = mutableListOf()
         //Se hace una petición para obtener los pagos con el ID del grupo
@@ -122,8 +143,8 @@ class PaymentDAO : DAO<Int, Payment> {
         }
         //Devuelve la lista mapeada de DTO a Pago
         return payments.map {
-            Payment(it.payment_id, it.payment_args, UserDAO().getItem(it.payer_email)!!, LocalDate.parse(it.payment_date), it.total_payment.toDouble(), GroupDAO().getItem(it.group_id)!!, UserDAO().getPayersfromPayment(it.payment_id!!))
-        }
+            Payment(it.payment_id, it.payment_args, UserDAO().getItem(it.payer_email)!!, LocalDateTime.parse(it.payment_date).toLocalDate(), it.total_payment.toDouble(), GroupDAO().getItem(it.group_id)!!, UserDAO().getPayersfromPayment(it.payment_id!!).toMutableList())
+        }.toMutableList()
     }
     //Función para obtener la deuda del usuario (Lo que él debe al grupo)
     suspend fun getDebt(u: User, g: Group): Double {
@@ -138,7 +159,7 @@ class PaymentDAO : DAO<Int, Payment> {
             }
         }
         //Devuelve la cantidad calculada
-        return res
+        return String.format("%.2f", res).toDouble()
     }
     //Función de pago
     suspend fun pay(email: String, id: Int) {
@@ -156,6 +177,6 @@ class PaymentDAO : DAO<Int, Payment> {
             res = response.body()!!
         }
         //Devuelve la respuesta
-        return res
+        return String.format("%.2f", res).toDouble()
     }
 }

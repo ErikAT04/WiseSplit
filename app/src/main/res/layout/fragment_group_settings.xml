@@ -38,10 +38,10 @@
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
             android:src="@drawable/baseline_group_remove_24"
-            android:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Salirse del grupo"
-            android:textColor="?attr/colorPrimary"
+            android:textColor="@color/mainBlue"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/imageView3"
@@ -73,17 +73,18 @@
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
             android:src="@drawable/baseline_logout_24"
-            android:tint="?attr/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/mainBlue" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/groupSettingsToolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="@color/darkBlue"
+        app:titleTextColor="@color/white"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -117,6 +118,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
+            android:textColor="@color/darkBlue"
+            android:textColorLink="@color/darkBlue"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/grupoImageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/grupoImageView"
@@ -137,7 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cambiar nombre del Grupo"
-            android:textColor="?attr/colorPrimary"
+            android:textColor="@color/mainBlue"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/imageView2"
@@ -152,10 +156,10 @@
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
             android:src="@drawable/baseline_drive_file_rename_outline_24"
-            android:tint="?attr/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/mainBlue" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

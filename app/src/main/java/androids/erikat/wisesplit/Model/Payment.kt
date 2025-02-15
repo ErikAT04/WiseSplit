@@ -8,5 +8,5 @@ class Payment(var id:Int?, //ID del pago
               var date:LocalDate, //Fecha del pago
               var quantity:Double, //Cantidad pagada
               var group:Group, //Grupo al que pertenece el pago
-              var listaPagadores:List<Payer> //Lista de gente que tiene que pagar
+              var listaPagadores:MutableList<Payer> //Lista de gente que tiene que pagar
 )

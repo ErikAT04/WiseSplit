@@ -16,7 +16,7 @@ class APIUtils {
         var isThisUserAdmin:Boolean = false
         val retrofit = Retrofit.Builder()
             //ES NECESARIO CAMBIAR EL HOST POR EL QUE TENGA LA API
-            .baseUrl("http://192.168.1.130:8000/api/")
+            .baseUrl("http://192.168.1.56:8000/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

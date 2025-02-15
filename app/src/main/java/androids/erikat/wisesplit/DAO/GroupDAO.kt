@@ -1,5 +1,6 @@
 package androids.erikat.wisesplit.DAO
 
+import android.os.Build
 import android.util.Log
 import androids.erikat.wisesplit.DTO.GroupDTO
 import androids.erikat.wisesplit.Model.Group
@@ -7,6 +8,7 @@ import androids.erikat.wisesplit.Model.User
 import androids.erikat.wisesplit.Utils.APIUtils
 import androids.erikat.wisesplit.Utils.APIUtils.Companion.retrofit
 import androids.erikat.wisesplit.services.GroupService
+import androidx.annotation.RequiresApi
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +51,7 @@ class GroupDAO : DAO<Int, Group> {
         //Devuelve la petición
         return resp
     }
-
+    //Función de Obtención
     override suspend fun getItem(value: Int): Group? {
         //Se crea un objeto nulo de grupo
         var group: Group? = null
@@ -109,11 +111,25 @@ class GroupDAO : DAO<Int, Group> {
         }
     }
     //Función ed Expulsión de Usuario
+    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun expulsarUsuario(id: Int, email: String):String {
         //Se hace una petición para borrar un usuario del grupo
         var res = apiService.eraseUser(id, email)
         //Si se completa correctamente, borra el usuario y muestra el mensaje dado por la API
         if(res.isSuccessful){
+            var usuario = UserDAO().getItem(email)!!
+            var listaPagosDondeParticipa = PaymentDAO().getPaymentsByGroup(APIUtils.selectedGroup!!)
+            for(pago in listaPagosDondeParticipa){
+                var listaPagadores = pago.listaPagadores
+                var iterator = listaPagadores.iterator()
+                while(iterator.hasNext()){
+                    var pagador = iterator.next()
+                    if(pagador.user == usuario) {
+                        iterator.remove()
+                        PaymentDAO().update(pago)
+                    }
+                }
+            }
             return res.body()!!
         } else {
             return "Error de BD"
